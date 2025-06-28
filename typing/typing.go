@@ -21,7 +21,7 @@ type Base interface {
 }
 
 
-func Zeroed[ T any ] ( a T ) {
+func Zeroed[ T any ] ( T ) T {
 	return *new(T) ; 
 }
 
