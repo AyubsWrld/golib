@@ -5,44 +5,53 @@ import (
 	"reflect"
 )
 
-type Numeric interface{
-	~int  | ~int8  | ~int16  | ~int32  | ~int64
-	~uint | ~uint8 | ~uint16 | ~uint32 
-}
 
-type Textual interface{
-	~string 
-}
+/*
+   @purpose:      Returns the zero type of any concrete type. 
 
-type Base interface {
-	~int  | ~int8  | ~int16  | ~int32  | ~int64
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~string 
-	~complex64 | ~complex128 | ~bool
-}
+                                       return
 
+   @return:        [out]                     r            T 
+	 																					 Instace of a zero valued Concrete type.
+
+   @notes:        This function only works with interface values who's dynamic type 
+	 								is well defined ( concrete ).
+*/
 
 func Zeroed[ T any ] (  ) T {
 	return *new(T) ; 
 }
 
-func dynamic_cast[T any, U any] ( a U ) U {
-	if r, ok :=  any(a).(U) ; ok {
+
+/*
+   @purpose:      Casts type a to concrete/interface type T without causing a panic. Had a panic
+	 								ensued from the result of the type assertion, the function returns the zero 
+									type of T. 
+
+   @param:        [in]                       a             T
+	 																					 Concrete type we wish to cast
+
+                                       return
+
+   @return:        [out]                     r            T 
+	 																					 Interface value with dynamic type T and dynamic value of
+																						 a. 
+
+   @notes:        This function has only been tested with type conversions to 
+	 								concrete base types. It should work with any compounds types
+									as *new(T) returns the zero type of any compound type ( although
+									it escapes ). 
+*/
+
+func dynamic_cast[T any] ( a any ) T {
+	if r, ok :=  any(a).(T) ; ok {
 		return r ; 
 	}
-	panic("Runtime Conversion Failed") ; 
+	return Zeroed[T]() ; 
 }
 
 
 func decltype[T any] ( a T ) reflect.Type {
 	return reflect.TypeOf(a) ; 
 }
-
-
-
-func main(){
-	var y int = 1 ; 
-	x := dynamic_cast[float64,int](y) ; 
-	fmt.Println(x) ; 
-}
-
 
