@@ -5,22 +5,6 @@ import (
 	"reflect"
 )
 
-
-var zero_values map[reflect.Kind]interface{} = map[reflect.Kind]interface{}{
-	reflect.Uint   : 0 , 
-	reflect.Uint8  : 0 , 
-	reflect.Uint16 : 0 , 
-	reflect.Uint32 : 0 , 
-	reflect.Int    : 0 , 
-	reflect.Int8   : 0 , 
-	reflect.Int16  : 0 , 
-	reflect.Int32  : 0 , 
-	reflect.Int64  : 0 , 
-	reflect.String : "",
-	reflect.Bool   : false ,
-}
-
-
 type Numeric interface{
 	~int  | ~int8  | ~int16  | ~int32  | ~int64
 	~uint | ~uint8 | ~uint16 | ~uint32 
@@ -28,6 +12,17 @@ type Numeric interface{
 
 type Textual interface{
 	~string 
+}
+
+type Base interface {
+	~int  | ~int8  | ~int16  | ~int32  | ~int64
+	~uint | ~uint8 | ~uint16 | ~uint32 | ~string 
+	~complex64 | ~complex128 | ~bool
+}
+
+
+func Zeroed[ T any ] ( a T ) {
+	return *new(T) ; 
 }
 
 func dynamic_cast[T any, U any] ( a U ) U {
