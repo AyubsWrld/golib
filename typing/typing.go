@@ -133,7 +133,36 @@ func MutCast[T any] ( from *any ) {
 	*from = Zeroed[T]() ; 
 }
 
+/* Unused, needs work */ 
+
 func decltype[T any] ( a T ) reflect.Type {
 	return reflect.TypeOf(a) ; 
+}
+
+/*
+   @purpose:      Iterates through struct printing the types and the types of the struct
+
+   @param:        [in]                       x             T
+	 																					 struct we wish to inspect
+
+                                       return
+
+   @return:        [out]                     None
+
+   @notes:        This function still needs to be made to work with pointers to
+									structs. If anything whose underlying type is not struct-like
+									it causes the routine to panic. 
+*/
+
+func InspectStruct[ T any ](x T){
+	t := reflect.TypeOf(x);
+	v := reflect.ValueOf(x);
+	cardinality := reflect.TypeOf(x).NumField();
+	for i := 0 ; i < cardinality ; i++ {
+		field := t.Field(i) ; 
+		value := v.Field(i) ; 
+		fmt.Printf("%v : %v\n", field, value.Interface()) ;
+		fmt.Printf("\n") ;
+	}
 }
 
